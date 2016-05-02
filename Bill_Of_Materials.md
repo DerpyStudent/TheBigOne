@@ -1,9 +1,12 @@
-servomotors 4 or 5
-
-Motor Control board
+servomotors 6x
 
 Servo extension cables
 
-arduino
+arduino uno
 
-spray paint 
+adafruit 16 Channel Servo Shield
+
+WiiChuck Shield
+
+Wii Nunchuk
+
