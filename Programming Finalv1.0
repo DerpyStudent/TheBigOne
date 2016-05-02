@@ -1,0 +1,174 @@
+
+
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+#include "nunchuck_funcs.h"
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x41);
+
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  300 // this is the 'maximum' pulse length count (out of 4096)
+
+int loop_cnt = 0;
+
+byte accx, accy, zbut, cbut, joyx, joyy;
+int ledPin = 13;// our servo # counter
+uint8_t servonum = 0;
+uint8_t servonum1 = 1;
+uint8_t servonum2 = 2;
+uint8_t servonum3 = 3;
+uint8_t servonum4 = 4;
+uint8_t servonum5 = 5;
+uint8_t servonum6 = 6;
+uint8_t servonum7 = 7;
+
+
+
+
+void setup()
+{
+  Serial.begin(19200);
+  //Serial.print("just starting");
+  nunchuck_setpowerpins();
+  //Serial.print("finish setting power pins");
+  nunchuck_init(); // send the initilization handshake
+
+  Serial.print("Ready");
+  pwm.begin();
+
+  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+
+  yield();
+  Serial.println("Servo Ready");
+}
+
+
+void setServoPulse(uint8_t n, double pulse) {
+  double pulselength;
+
+  pulselength = 50000;   // 1,000,000 us per second
+  pulselength /= 60;   // 60 Hz
+  Serial.print(pulselength); Serial.println(" us per period");
+  pulselength /= 4096;  // 12 bits of resolution
+  Serial.print(pulselength); Serial.println(" us per bit");
+  pulse *= 1000;
+  pulse /= pulselength;
+  Serial.println(pulse);
+  pwm.setPWM(n, 0, pulse);
+}
+
+void loop()
+{
+  if ( loop_cnt > 100 ) { // every 100 msecs get new data
+    loop_cnt = 0;
+
+    nunchuck_get_data();
+
+    accx  = nunchuck_accelx(); // ranges from approx 70 - 182
+    accy  = nunchuck_accely(); // ranges from approx 65 - 173
+    zbut = nunchuck_zbutton();
+    cbut = nunchuck_cbutton();
+    joyx = nunchuck_joyx();
+    joyy = nunchuck_joyy();
+
+    Serial.print("accx: "); Serial.print((byte)accx, DEC);
+    Serial.print("\taccy: "); Serial.print((byte)accy, DEC);
+    Serial.print("\tzbut: "); Serial.print((byte)zbut, DEC);
+    Serial.print("\tcbut: "); Serial.println((byte)cbut, DEC);
+    Serial.print("joyX"); Serial.print((byte)joyx, DEC);
+    Serial.print(" joyY: "); Serial.print((byte)joyy, DEC);
+
+    //base servo controlled by x axis accelerometer
+    if ( accx > 130) {
+      uint16_t pulselen = SERVOMIN;
+      pwm.setPWM(servonum, 0, pulselen);
+      pulselen++;
+
+    }
+
+
+
+    else if (accx < 130) {
+
+      uint16_t pulselen = SERVOMAX;
+      pwm.setPWM(servonum, 0, pulselen);
+      pulselen--;
+
+
+    }
+
+    //left and right servo
+
+    if (accy > 130) {
+      uint16_t pulselen2 = SERVOMIN;
+      pwm.setPWM(servonum1, 0, pulselen2);
+      pulselen2++;
+
+      uint16_t pulselen3 = SERVOMAX;
+      pwm.setPWM(servonum2, 0, pulselen3);
+      pulselen3--;
+
+    }
+    else if ( accy < 130) {
+      uint16_t pulselen2 = SERVOMAX;
+      pwm.setPWM(servonum1, 0, pulselen2);
+      pulselen2--;
+
+      uint16_t pulselen3 = SERVOMIN;
+      pwm.setPWM(servonum2, 0, pulselen3);
+      pulselen3++;
+
+    }
+
+    // second servos on arm
+
+    if ( joyy < 120) {
+      uint16_t pulselen4 = SERVOMIN;
+      pwm.setPWM(servonum3, 0, pulselen4);
+      pulselen4++;
+
+      uint16_t pulselen5 = SERVOMAX;
+      pwm.setPWM(servonum4, 0, pulselen5);
+      pulselen5--;
+
+
+    }
+
+
+
+    else if (joyy > 135) {
+
+      uint16_t pulselen4 = SERVOMAX;
+      pwm.setPWM(servonum3, 0, pulselen4);
+      pulselen4--;
+
+      uint16_t pulselen5 = SERVOMIN;
+      pwm.setPWM(servonum4, 0, pulselen5);
+      pulselen5++;
+
+
+    }
+
+    //grabby thing
+
+    if (cbut = 1) {
+      uint16_t pulselen6 = SERVOMIN;
+      pwm.setPWM(servonum5, 0, pulselen6);
+      pulselen6++;
+    }
+    else if (zbut = 1) {
+      uint16_t pulselen6 = SERVOMAX;
+      pwm.setPWM(servonum5, 0, pulselen6);
+      pulselen6--;
+    }
+
+
+
+
+
+  }
+  loop_cnt++;
+  delay(1);
+}
+
+
