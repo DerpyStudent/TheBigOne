@@ -1,0 +1,36 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 -Initial problems: motors way too small, questionable load?\
+\
+major difficulties getting the wii nunchuk to give signals to the arduino. Need to find an example code that actually works\
+\
+having problems with the adafruit 16 channel servo shield. I can get the motors to work through the shield, but it doesn\'92t work with the wiichuck shield. possibly bad soldering?\
+\
+Turns out the adafruit shield needs an external power source. gotta figure that out.\
+\
+Went back and resoldered the connections on the shield. Also was taught by M. Shiloh about IC2 connections. Checked the code, turns out both the wiichuck and the servo shield both used the address of 41. Soldered a port for a different address on the shield, and changed the code to 42. Seemed to fix the problems.\
+\
+Some of the 3d printed parts have been getting too stripped to work well with the metal gears-will try to reprint them with a countersink for the attachments that came with the motors.\
+\
+reprinted the part for the base motor with a countersink, works perfectly after some screws and superglue. However, the print was supposed to take 3 hours, instead took 19 hours.\
+\
+Something is now wrong with the printer? Cura, gcode, and repetier host all say the estimated time is 3 hrs, still is jacking the time up to 19 hrs. Will attempt to find solution online.\
+\
+Running into problems adjusting the code for the amount of rotation the servos cover. It turns out they are continuous rotation servos, unlike what I thought. I don\'92t want continuous rotation\'85\
+\
+For some reason when connect more than 3 servos to the shield, they work for a short period, then start to spaz out, and behave in ways I really don\'92t want them too. Need to check the code and wiring\
+\
+Haven\'92t been able to find any online solutions, or people who have similar problems with their printer. Could possibly be the power source? I have a 3rd part PC power supply though..\
+\
+Reflashed the firmware on the printer, seems to be functioning normally again. Time to redesign the other parts that need countersinks\
+\
+Booted up my external SSD that I run windows off of, and was greeted by a nice BSOD. Tried editing the registry from cmd. did not change anything. I looked up the particular error, and its due to different hardware than expected? possible changes in expected ram? it\'92s sorta weird. I don\'92t have an install CD (or disk drive for that matter), also lost my flash drive with a copy of the win10 iso. will have to wait until work on monday to restore the machine. Good thing all my files are backed up to google drive. \
+\
+Project is still spazzing out, this is great. Crit tomorrow should go well. PC is still crashed, can\'92t design the rest of the parts.\
+\
+\
+}
